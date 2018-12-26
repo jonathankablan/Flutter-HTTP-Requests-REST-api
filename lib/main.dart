@@ -26,9 +26,14 @@ class HomePageState extends State<HomePage> {
         "Accept": "application/json"
       }
     );
-    data = JSON.decode(response.body);
-    print(data[1]["title"]);
-    
+    data = jsonDecode(response.body);
+
+    for (var item in data) {
+      print(item['id']);
+      print(item['title']);
+      print("\n");
+    }
+
     return "Success!";
   }
 
