@@ -23,6 +23,8 @@ class HomePageState extends State<HomePage> {
   Map dataGet;
   List userData;
 
+  int _count = 0;
+
   Future<String> getData() async {
     await new Future.delayed(new Duration(seconds: 5));
     var response = await http.get(
@@ -55,6 +57,8 @@ class HomePageState extends State<HomePage> {
     dataPost = jsonDecode(response.body);
 
     print(dataPost);
+
+    setState(() { _count += 5; });
 
     return "Success!";
   }
@@ -91,6 +95,30 @@ class HomePageState extends State<HomePage> {
                           fontSize: 20.0,
                           fontWeight: FontWeight.w700,
                         ),),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("${_count}",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w700,
+                        ),),
+                      ),
+                      new Center( // 3
+                        child: new Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            new RaisedButton(
+                              child: new Text("Get Request"),
+                              onPressed: getData,
+                            ),
+                            new RaisedButton(
+                              child: new Text("Get Request"),
+                              onPressed: postData,
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
