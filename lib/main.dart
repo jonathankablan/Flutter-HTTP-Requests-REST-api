@@ -20,18 +20,26 @@ class HomePageState extends State<HomePage> {
   List data;
   var dataPost;
 
+  Map dataGet;
+  List userData;
+
   Future<String> getData() async {
+    await new Future.delayed(new Duration(seconds: 5));
     var response = await http.get(
-      Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"),
+      Uri.encodeFull("https://reqres.in/api/users?page=2"),
       headers: { "Accept": "application/json" }
     );
-    data = jsonDecode(response.body);
+    dataGet = jsonDecode(response.body);
 
-    for (var item in data) {
-      print(item['id']);
-      print(item['title']);
-      print("\n");
-    }
+    setState(() {
+      userData = dataGet["data"];
+    });
+
+    // for (var item in data) {
+    //   print(item['id']);
+    //   print(item['title']);
+    //   print("\n");
+    // }
 
     return "Success!";
   }
@@ -52,23 +60,46 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Center(
-        child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new RaisedButton(
-                child: new Text("Get data"),
-                onPressed: getData,
-              ),
-              new RaisedButton(
-                child: new Text("Post data"),
-                onPressed: postData,
-              ),
-            ]
-        )
+      appBar: AppBar(
+        title: Text("Request GET|POST "),
+        backgroundColor: Colors.green,
       ),
+      body: new RefreshIndicator(
+        child: ListView.builder(
+            itemCount: userData == null ? 0 : userData.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(userData[index]["avatar"]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text("${userData[index]["first_name"]} ${userData[index]["last_name"]}",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w700,
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+        ),
+        onRefresh: getData,
+      ), 
     );
   }
 }
