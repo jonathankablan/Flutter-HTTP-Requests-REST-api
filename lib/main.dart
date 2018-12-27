@@ -36,22 +36,16 @@ class HomePageState extends State<HomePage> {
     setState(() {
       userData = dataGet["data"];
     });
-
-    // for (var item in data) {
-    //   print(item['id']);
-    //   print(item['title']);
-    //   print("\n");
-    // }
-
+    
     return "Success!";
   }
 
   Future<String> postData() async {
-    var url = "https://cryptizy.com/api/connexion";
+    var url = "https://test.com/api/connexion";
     var response = await http.post(
         Uri.encodeFull(url), 
         headers: { "Accept": "application/json" },
-        body: {"email": "lockpassero@gmail.com", "password": "052102362020"}
+        body: {"email": "", "password": ""}
       );
     
     dataPost = jsonDecode(response.body);
@@ -110,11 +104,11 @@ class HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             new RaisedButton(
-                              child: new Text("Get Request"),
+                              child: new Text("GET Request"),
                               onPressed: getData,
                             ),
                             new RaisedButton(
-                              child: new Text("Get Request"),
+                              child: new Text("POST Request"),
                               onPressed: postData,
                             ),
                           ],
